@@ -45,7 +45,7 @@ def zip_folder(folder: Path, out: Path) -> None:
                 archive.writestr(info, file.read_bytes())
 
 
-def build_host(host: str, version: str) -> Path:
+def build_host(host: str, version: str, out_dir: Path = DIST) -> Path:
     stage = STAGING / host
     if stage.exists():
         shutil.rmtree(stage)
@@ -60,8 +60,8 @@ def build_host(host: str, version: str) -> Path:
 
     stamp_version(pkg_dir, host, version)
 
-    DIST.mkdir(exist_ok=True)
-    out = DIST / f"fridaforge-{host}-{version}.zip"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    out = out_dir / f"fridaforge-{host}-{version}.zip"
     if out.exists():
         out.unlink()
     zip_folder(stage, out)
@@ -71,11 +71,17 @@ def build_host(host: str, version: str) -> Path:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Build FridaForge archives.")
     parser.add_argument("--version", default=None, help="Override version.")
+    parser.add_argument(
+        "--out-dir",
+        default=None,
+        help="Output directory for the archives (default: ./dist).",
+    )
     args = parser.parse_args()
     version = args.version or read_version()
+    out_dir = Path(args.out_dir).resolve() if args.out_dir else DIST
 
     for host in ("binja", "ida"):
-        out = build_host(host, version)
+        out = build_host(host, version, out_dir)
         print(f"Built {out}")
 
 

@@ -7,15 +7,20 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 
 
-def test_build_creates_both_archives():
+def test_build_creates_both_archives(tmp_path):
     subprocess.run(
-        [sys.executable, str(ROOT / "build" / "build.py"), "--version", "9.9.9"],
+        [
+            sys.executable,
+            str(ROOT / "build" / "build.py"),
+            "--version", "9.9.9",
+            "--out-dir", str(tmp_path),
+        ],
         check=True,
         cwd=ROOT,
     )
 
-    binja = ROOT / "dist" / "fridaforge-binja-9.9.9.zip"
-    ida = ROOT / "dist" / "fridaforge-ida-9.9.9.zip"
+    binja = tmp_path / "fridaforge-binja-9.9.9.zip"
+    ida = tmp_path / "fridaforge-ida-9.9.9.zip"
     assert binja.exists()
     assert ida.exists()
 
