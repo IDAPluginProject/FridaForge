@@ -1,0 +1,79 @@
+"""Assemble the two FridaForge host archives."""
+
+import argparse
+import json
+import shutil
+import zipfile
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+PKG = ROOT / "fridaforge"
+HOSTS = ROOT / "hosts"
+DIST = ROOT / "dist"
+STAGING = ROOT / "build" / "_staging"
+
+_IGNORE = shutil.ignore_patterns("__pycache__", "*.pyc")
+
+
+def read_version() -> str:
+    namespace: dict = {}
+    exec((PKG / "_version.py").read_text(encoding="utf-8"), namespace)
+    return namespace["__version__"]
+
+
+def stamp_version(pkg_dir: Path, host: str, version: str) -> None:
+    if host == "binja":
+        path = pkg_dir / "plugin.json"
+        data = json.loads(path.read_text(encoding="utf-8"))
+        data["version"] = version
+        path.write_text(json.dumps(data, indent=2), encoding="utf-8")
+    else:
+        path = pkg_dir / "ida-plugin.json"
+        data = json.loads(path.read_text(encoding="utf-8"))
+        data["plugin"]["version"] = version
+        path.write_text(json.dumps(data, indent=2), encoding="utf-8")
+
+
+def zip_folder(folder: Path, out: Path) -> None:
+    with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as archive:
+        for file in folder.rglob("*"):
+            if file.is_file():
+                archive.write(file, file.relative_to(folder))
+
+
+def build_host(host: str, version: str) -> Path:
+    stage = STAGING / host
+    if stage.exists():
+        shutil.rmtree(stage)
+    stage.mkdir(parents=True)
+
+    pkg_dir = stage / "fridaforge"
+    shutil.copytree(PKG, pkg_dir, ignore=_IGNORE)
+
+    for item in (HOSTS / host).iterdir():
+        if item.is_file():
+            shutil.copy2(item, pkg_dir / item.name)
+
+    stamp_version(pkg_dir, host, version)
+
+    DIST.mkdir(exist_ok=True)
+    out = DIST / f"fridaforge-{host}-{version}.zip"
+    if out.exists():
+        out.unlink()
+    zip_folder(stage, out)
+    return out
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Build FridaForge archives.")
+    parser.add_argument("--version", default=None, help="Override version.")
+    args = parser.parse_args()
+    version = args.version or read_version()
+
+    for host in ("binja", "ida"):
+        out = build_host(host, version)
+        print(f"Built {out}")
+
+
+if __name__ == "__main__":
+    main()
