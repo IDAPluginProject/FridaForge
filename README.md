@@ -58,15 +58,29 @@ The shared core knows nothing about IDA or Binary Ninja. Each host lives in `hos
 
 ## 📦 Installation
 
-Download the archive for your tool from the [latest release](https://github.com/noobexon1/FridaForge/releases) and unzip it into the tool's plugins folder:
+Grab the archive for your tool from the [latest release](https://github.com/noobexon1/FridaForge/releases). There's one per host — `fridaforge-binja-<version>.zip` and `fridaforge-ida-<version>.zip`.
 
-- 🟠 **Binary Ninja** — unzip `fridaforge-binja-<version>.zip` so that `<binja user plugins>/fridaforge/` exists, then restart Binary Ninja.
+### 🟠 Binary Ninja
 
-  Find your plugins directory with:
-  ```python
-  import binaryninja; print(binaryninja.user_plugin_path())
-  ```
-- 🔵 **IDA Pro** — unzip `fridaforge-ida-<version>.zip` so that `<IDA>/plugins/fridaforge/ida-plugin.json` exists, then restart IDA.
+1. Find your user plugins directory by running this in Binary Ninja's Python console:
+   ```python
+   binaryninja.user_plugin_path()
+   ```
+2. Extract `fridaforge-binja-<version>.zip` into that directory so that `<binja user plugins>/fridaforge/` exists.
+3. Restart Binary Ninja.
+
+### 🔵 IDA Pro
+
+1. **Prerequisites:**
+   - IDA Pro (tested with 9.0, but any version with Python 3 and `idaapi` should work).
+   - [Frida](https://frida.re) installed on your target system/device.
+   - PyQt5 for clipboard functionality (usually bundled with IDA's Python).
+2. Locate your IDA Pro plugins directory — in IDA, go to `Help` → `About IDA...` → `IDA directories` tab → `Plugins`. Common paths:
+   - **Windows:** `%APPDATA%\Hex-Rays\IDA Pro\plugins` or `C:\Program Files\IDA Pro X.X\plugins`
+   - **Linux:** `~/.idapro/plugins`
+   - **macOS:** `~/.idapro/plugins`
+3. Extract `fridaforge-ida-<version>.zip` into that directory so that `<plugins>/fridaforge/ida-plugin.json` exists.
+4. Restart IDA Pro. The plugin loads automatically — you'll see `[FridaForge]` messages in the Output window if it loaded correctly.
 
 ## 🚀 Usage
 
