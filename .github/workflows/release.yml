@@ -1,0 +1,29 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      - name: Install pytest
+        run: pip install pytest
+      - name: Run tests
+        run: pytest -v
+      - name: Build archives
+        run: python build/build.py --version "${GITHUB_REF_NAME#v}"
+      - name: Upload release assets
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/fridaforge-binja-*.zip
+            dist/fridaforge-ida-*.zip
