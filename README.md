@@ -15,8 +15,6 @@
 ![Frida](https://img.shields.io/badge/Frida-Instrumentation-red)
 [![GitHub License](https://img.shields.io/github/license/noobexon1/FridaForge)](LICENSE)
 
-*One codebase, two decompilers, zero boilerplate.* 🔥
-
 </div>
 
 ## ✨ Features
