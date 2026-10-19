@@ -135,3 +135,25 @@ def test_negate_x86_non_branch_warns():
     NegateX86CondBranchCommand().run(be)
     assert be.clipboard is None
     assert be.warnings
+
+
+from fridaforge.commands import ALL_COMMANDS
+
+
+def test_registry_has_five_unique_commands():
+    assert len(ALL_COMMANDS) == 5
+    ids = [c.id for c in ALL_COMMANDS]
+    assert len(set(ids)) == 5
+
+
+def test_registry_hotkeys_are_unique():
+    hotkeys = [c.hotkey for c in ALL_COMMANDS]
+    assert all(hotkeys)
+    assert len(set(hotkeys)) == 5
+
+
+def test_registry_every_command_has_context_and_description():
+    for c in ALL_COMMANDS:
+        assert c.description
+        assert c.category
+        assert c.context is not None
