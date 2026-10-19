@@ -45,3 +45,40 @@ def test_dlopen_without_module_warns_and_skips():
     DlopenHooksCommand().run(be)
     assert be.clipboard is None
     assert be.warnings
+
+
+from fridaforge.commands.modify_section_protection import (
+    ModifySectionProtectionCommand,
+)
+
+
+def test_section_protection_copies_for_valid_section():
+    be = FakeBackend(
+        module_name="libfoo.so",
+        current_address=0x2000,
+        section_at={0x2000: ".text"},
+    )
+    ModifySectionProtectionCommand().run(be)
+    assert be.clipboard is not None
+    assert ".text" in be.clipboard
+    assert "libfoo.so" in be.clipboard
+
+
+def test_section_protection_no_address_skips():
+    be = FakeBackend(current_address=None)
+    ModifySectionProtectionCommand().run(be)
+    assert be.clipboard is None
+
+
+def test_section_protection_no_section_warns():
+    be = FakeBackend(current_address=0x2000, section_at={})
+    ModifySectionProtectionCommand().run(be)
+    assert be.clipboard is None
+    assert be.warnings
+
+
+def test_section_protection_non_dot_section_warns():
+    be = FakeBackend(current_address=0x2000, section_at={0x2000: "extern"})
+    ModifySectionProtectionCommand().run(be)
+    assert be.clipboard is None
+    assert be.warnings
