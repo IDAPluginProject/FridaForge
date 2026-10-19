@@ -4,9 +4,12 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fridaforge"
-version = "0.1.0"
+dynamic = ["version"]
 description = "Generate Frida scripts from IDA Pro and Binary Ninja"
 requires-python = ">=3.10"
+
+[tool.setuptools.dynamic]
+version = {attr = "fridaforge._version.__version__"}
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
