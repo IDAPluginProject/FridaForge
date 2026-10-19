@@ -1,0 +1,11 @@
+{
+  "IDAMetadataDescriptorVersion": 1,
+  "plugin": {
+    "name": "FridaForge",
+    "author": "noobexon1",
+    "description": "Generate Frida scripts directly from IDA Pro",
+    "version": "0.1.0",
+    "url": "https://github.com/noobexon1/FridaForge",
+    "entryPoint": "ida_entry.py"
+  }
+}
