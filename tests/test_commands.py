@@ -28,3 +28,20 @@ def test_function_hook_metadata():
     assert cmd.context == ContextKind.FUNCTION
     assert cmd.description
     assert cmd.hotkey
+
+
+from fridaforge.commands.hook_dlopen_functions import DlopenHooksCommand
+
+
+def test_dlopen_copies_filled_snippet():
+    be = FakeBackend(module_name="libfoo.so")
+    DlopenHooksCommand().run(be)
+    assert be.clipboard is not None
+    assert "libfoo.so" in be.clipboard
+
+
+def test_dlopen_without_module_warns_and_skips():
+    be = FakeBackend(module_name="")
+    DlopenHooksCommand().run(be)
+    assert be.clipboard is None
+    assert be.warnings
