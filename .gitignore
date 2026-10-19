@@ -22,6 +22,9 @@ env/
 # Agent / SDD scratch (task briefs, reports, review diffs, progress ledger)
 .superpowers/
 
+# Local-only design docs (kept on disk, not published)
+docs/superpowers/
+
 # Editors / IDEs
 .idea/
 .vscode/
