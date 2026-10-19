@@ -36,9 +36,13 @@ def stamp_version(pkg_dir: Path, host: str, version: str) -> None:
 
 def zip_folder(folder: Path, out: Path) -> None:
     with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as archive:
-        for file in folder.rglob("*"):
+        for file in sorted(folder.rglob("*")):
             if file.is_file():
-                archive.write(file, file.relative_to(folder))
+                arcname = file.relative_to(folder).as_posix()
+                info = zipfile.ZipInfo(arcname, date_time=(1980, 1, 1, 0, 0, 0))
+                info.compress_type = zipfile.ZIP_DEFLATED
+                info.external_attr = 0o644 << 16
+                archive.writestr(info, file.read_bytes())
 
 
 def build_host(host: str, version: str) -> Path:
