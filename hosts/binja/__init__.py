@@ -1,6 +1,6 @@
 """Binary Ninja plugin entry point for FridaForge."""
 
-from binaryninja import PluginCommand
+from binaryninja import PluginCommand, log_info
 
 from fridaforge._version import __version__
 from fridaforge.backend import ContextKind
@@ -65,3 +65,5 @@ def _register_hotkey(command) -> None:
 for _command in ALL_COMMANDS:
     _register_menu(_command)
     _register_hotkey(_command)
+
+log_info(f"[FridaForge] v{__version__} loaded.")

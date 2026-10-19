@@ -19,4 +19,4 @@ class DlopenHooksCommand(Command):
             return
 
         snippet = DlopenHookGenerator().generate(module_name)
-        backend.copy_to_clipboard(snippet)
+        self._deliver(backend, snippet)

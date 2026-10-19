@@ -22,3 +22,10 @@ class Command(ABC):
     @abstractmethod
     def run(self, backend: Backend) -> None:
         """Execute the command against the given backend."""
+
+    def _deliver(self, backend: Backend, snippet: str) -> None:
+        """Copy the snippet to the clipboard and report the outcome."""
+        if backend.copy_to_clipboard(snippet):
+            backend.log_info("Frida snippet copied to clipboard.")
+        else:
+            backend.log_warn("Failed to copy snippet to clipboard.")

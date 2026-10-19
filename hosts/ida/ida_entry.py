@@ -32,6 +32,11 @@ class _CommandHandler(idaapi.action_handler_t):
         return 1
 
     def update(self, ctx):
+        if idaapi.get_widget_type(ctx.widget) not in (
+            idaapi.BWN_DISASM,
+            idaapi.BWN_PSEUDOCODE,
+        ):
+            return idaapi.AST_DISABLE_FOR_WIDGET
         path = TOP_MENU + "/"
         if self.command.category:
             path += self.command.category + "/"

@@ -41,4 +41,4 @@ class NegateX86CondBranchCommand(Command):
         snippet = NegateX86CondBranchGenerator().generate(
             module_name, relative_address
         )
-        backend.copy_to_clipboard(snippet)
+        self._deliver(backend, snippet)

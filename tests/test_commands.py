@@ -1,5 +1,16 @@
 from fridaforge.backend import ContextKind, FunctionRef
+from fridaforge.commands import ALL_COMMANDS
+from fridaforge.commands.hook_dlopen_functions import DlopenHooksCommand
 from fridaforge.commands.hook_function import FunctionHookCommand
+from fridaforge.commands.modify_section_protection import (
+    ModifySectionProtectionCommand,
+)
+from fridaforge.commands.negate_cond_branch_arm64 import (
+    NegateArm64CondBranchCommand,
+)
+from fridaforge.commands.negate_cond_branch_x86 import (
+    NegateX86CondBranchCommand,
+)
 from tests.fakes import FakeBackend
 
 
@@ -26,11 +37,9 @@ def test_function_hook_without_function_warns_and_skips():
 def test_function_hook_metadata():
     cmd = FunctionHookCommand()
     assert cmd.context == ContextKind.FUNCTION
-    assert cmd.description
-    assert cmd.hotkey
-
-
-from fridaforge.commands.hook_dlopen_functions import DlopenHooksCommand
+    assert cmd.description == "Generate function hook"
+    assert cmd.category == "Hooks"
+    assert cmd.hotkey == "Shift+F"
 
 
 def test_dlopen_copies_filled_snippet():
@@ -45,11 +54,6 @@ def test_dlopen_without_module_warns_and_skips():
     DlopenHooksCommand().run(be)
     assert be.clipboard is None
     assert be.warnings
-
-
-from fridaforge.commands.modify_section_protection import (
-    ModifySectionProtectionCommand,
-)
 
 
 def test_section_protection_copies_for_valid_section():
@@ -82,14 +86,6 @@ def test_section_protection_non_dot_section_warns():
     ModifySectionProtectionCommand().run(be)
     assert be.clipboard is None
     assert be.warnings
-
-
-from fridaforge.commands.negate_cond_branch_arm64 import (
-    NegateArm64CondBranchCommand,
-)
-from fridaforge.commands.negate_cond_branch_x86 import (
-    NegateX86CondBranchCommand,
-)
 
 
 def test_negate_arm64_valid_branch_copies():
@@ -127,6 +123,7 @@ def test_negate_x86_valid_branch_copies():
     )
     NegateX86CondBranchCommand().run(be)
     assert be.clipboard is not None
+    assert "libfoo.so" in be.clipboard
     assert hex(0x1600 - 0x1000) in be.clipboard
 
 
@@ -135,9 +132,6 @@ def test_negate_x86_non_branch_warns():
     NegateX86CondBranchCommand().run(be)
     assert be.clipboard is None
     assert be.warnings
-
-
-from fridaforge.commands import ALL_COMMANDS
 
 
 def test_registry_has_five_unique_commands():

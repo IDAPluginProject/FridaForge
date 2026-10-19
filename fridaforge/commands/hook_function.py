@@ -23,4 +23,4 @@ class FunctionHookCommand(Command):
         snippet = FunctionHookGenerator().generate(
             module_name, relative_address, func.name
         )
-        backend.copy_to_clipboard(snippet)
+        self._deliver(backend, snippet)

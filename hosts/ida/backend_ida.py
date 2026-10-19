@@ -52,7 +52,9 @@ class IdaBackend(Backend):
     def copy_to_clipboard(self, text: str) -> bool:
         if not text:
             return False
-        app = QApplication.instance() or QApplication([])
+        app = QApplication.instance()
+        if app is None:
+            return False
         clipboard = app.clipboard()
         if clipboard is None:
             return False

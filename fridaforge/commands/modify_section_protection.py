@@ -36,4 +36,4 @@ class ModifySectionProtectionCommand(Command):
         snippet = ModifySectionProtectionGenerator().generate(
             module_name, section_name
         )
-        backend.copy_to_clipboard(snippet)
+        self._deliver(backend, snippet)

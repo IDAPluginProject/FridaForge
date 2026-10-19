@@ -39,4 +39,4 @@ class NegateArm64CondBranchCommand(Command):
         snippet = NegateArm64CondBranchGenerator().generate(
             module_name, relative_address
         )
-        backend.copy_to_clipboard(snippet)
+        self._deliver(backend, snippet)

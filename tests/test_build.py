@@ -7,7 +7,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 
 
-def test_build_creates_both_archives(tmp_path):
+def test_build_creates_both_archives():
     subprocess.run(
         [sys.executable, str(ROOT / "build" / "build.py"), "--version", "9.9.9"],
         check=True,
