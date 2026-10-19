@@ -73,20 +73,13 @@ Grab the archive for your tool from the [latest release](https://github.com/noob
    - IDA Pro (tested with 9.0, but any version with Python 3 and `idaapi` should work).
    - [Frida](https://frida.re) installed on your target system/device.
    - PyQt5 for clipboard functionality (usually bundled with IDA's Python).
-2. Locate your IDA Pro plugins directory — in IDA, go to `Help` → `About IDA...` → `IDA directories` tab → `Plugins`. Common paths:
-   - **Windows:** `%APPDATA%\Hex-Rays\IDA Pro\plugins` or `C:\Program Files\IDA Pro X.X\plugins`
-   - **Linux:** `~/.idapro/plugins`
-   - **macOS:** `~/.idapro/plugins`
-3. Extract `fridaforge-ida-<version>.zip` into that directory so that `<plugins>/fridaforge/ida-plugin.json` exists.
-4. Restart IDA Pro. The plugin loads automatically — you'll see `[FridaForge]` messages in the Output window if it loaded correctly.
-
-## 🚀 Usage
-
-1. Open your target binary in IDA Pro or Binary Ninja.
-2. Right-click in the disassembly or pseudocode view (or use the hotkeys above).
-3. Navigate to **FridaForge** → choose a category and action.
-4. The generated Frida script is copied to your clipboard.
-5. Paste into your Frida CLI, agent, or `.js` file.
+2. Locate your IDA Pro user directory by running this in IDA's Python console:
+    ```python
+    import ida_diskio; print(ida_diskio.get_user_idadir())
+    ```
+    If not already there, create a `plugins` directory in the user directory. This is where the plugin will be installed.
+3. Extract `fridaforge-ida-<version>.zip` into the `plugins` directory.
+4. Restart IDA Pro. The plugin loads automatically. You should see FridaForge as an option after right-clicking in the disassembly view.
 
 ### 🧱 Script Composition
 
