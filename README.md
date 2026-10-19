@@ -71,7 +71,6 @@ Grab the archive for your tool from the [latest release](https://github.com/noob
 
 1. **Prerequisites:**
    - IDA Pro (tested with 9.0, but any version with Python 3 and `idaapi` should work).
-   - [Frida](https://frida.re) installed on your target system/device.
    - PyQt5 for clipboard functionality (usually bundled with IDA's Python).
 2. Locate your IDA Pro user directory by running this in IDA's Python console:
     ```python
