@@ -24,11 +24,11 @@
 
 **Generate a function hook** — right-click in the disassembly/pseudocode view and pick an action:
 
-![Generating a function hook from the FridaForge context menu](screenshots/Screenshot_1.jpg)
+![Generating a function hook from the FridaForge context menu](assets/Screenshot_1.jpg)
 
 **Get a ready-to-use Frida script** — copied straight to your clipboard:
 
-![The generated Frida hook script](screenshots/Screenshot_2.jpg)
+![The generated Frida hook script](assets/Screenshot_2.jpg)
 
 ## ✨ Features
 
