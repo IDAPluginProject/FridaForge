@@ -2,8 +2,6 @@
 
 <img src="assets/logo.jpg" alt="FridaForge logo"/>
 
-# FridaForge
-
 **Generate Frida scripts directly from IDA Pro, Binary Ninja, and Ghidra.** ⚡
 
 [![GitHub release](https://img.shields.io/github/v/release/noobexon1/FridaForge)](https://github.com/noobexon1/FridaForge/releases)
