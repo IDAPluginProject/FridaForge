@@ -17,6 +17,16 @@
 
 </div>
 
+## 📸 Examples
+
+**Generate a function hook** — right-click in the disassembly/pseudocode view and pick an action:
+
+![Generating a function hook from the FridaForge context menu](screenshots/Screenshot_1.jpg)
+
+**Get a ready-to-use Frida script** — copied straight to your clipboard:
+
+![The generated Frida hook script](screenshots/Screenshot_2.jpg)
+
 ## ✨ Features
 
 Right-click (or hit a hotkey) in your disassembler to generate ready-to-use Frida snippets — the result is instantly copied to your clipboard.
