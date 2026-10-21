@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/logo.jpg" alt="FridaForge logo" width="180" />
+<img src="assets/logo.jpg" alt="FridaForge logo"/>
 
 # FridaForge
 
