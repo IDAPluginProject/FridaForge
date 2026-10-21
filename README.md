@@ -63,7 +63,7 @@ Right-click (or hit a hotkey) in your disassembler to generate ready-to-use Frid
 
 Each feature follows a simple pipeline: a **Frida template** (`fridaforge/templates/`) provides the JavaScript skeleton with placeholders, a **command** (`fridaforge/commands/`) gathers context through a host-agnostic **Backend**, and a **generator** (`fridaforge/core/`) fills the template to produce the final script.
 
-The shared core knows nothing about IDA or Binary Ninja. Each host lives in `hosts/` and provides a thin **adapter** that implements the `Backend` interface (data extraction, clipboard, menu + hotkey registration). Add a feature once and it works in both tools.
+The shared core knows nothing about IDA, Binary Ninja, or Ghidra. Each host lives in `hosts/` and provides a thin **adapter** that implements the `Backend` interface (data extraction, clipboard, menu + hotkey registration). Add a feature once and it works in all three.
 
 ## 📦 Installation
 
@@ -109,7 +109,7 @@ Snippets are designed to be independent building blocks. You can nest scripts in
 ```bash
 pip install pytest
 pytest -v                 # run the host-agnostic test suite
-python build/build.py     # writes dist/fridaforge-binja-*.zip and dist/fridaforge-ida-*.zip
+python build/build.py     # writes dist/fridaforge-binja-*.zip, dist/fridaforge-ida-*.zip and dist/fridaforge-ghidra-*.zip
 ```
 
 Builds are deterministic — the same source produces byte-identical archives.
