@@ -22,3 +22,9 @@ jobs:
           python -m py_compile
           hosts/binja/__init__.py hosts/binja/backend_binja.py
           hosts/ida/ida_entry.py hosts/ida/backend_ida.py
+          hosts/ghidra/backend_ghidra.py
+          hosts/ghidra/generate_function_hook.py
+          hosts/ghidra/generate_dlopen_hooks.py
+          hosts/ghidra/modify_section_protection.py
+          hosts/ghidra/negate_cond_branch_arm64.py
+          hosts/ghidra/negate_cond_branch_x86.py

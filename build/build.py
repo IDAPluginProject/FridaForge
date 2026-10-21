@@ -45,12 +45,7 @@ def zip_folder(folder: Path, out: Path) -> None:
                 archive.writestr(info, file.read_bytes())
 
 
-def build_host(host: str, version: str, out_dir: Path = DIST) -> Path:
-    stage = STAGING / host
-    if stage.exists():
-        shutil.rmtree(stage)
-    stage.mkdir(parents=True)
-
+def _stage_package_host(stage: Path, host: str, version: str) -> None:
     pkg_dir = stage / "fridaforge"
     shutil.copytree(PKG, pkg_dir, ignore=_IGNORE)
 
@@ -59,6 +54,34 @@ def build_host(host: str, version: str, out_dir: Path = DIST) -> Path:
             shutil.copy2(item, pkg_dir / item.name)
 
     stamp_version(pkg_dir, host, version)
+
+
+def _stage_ghidra(stage: Path) -> None:
+    src = HOSTS / "ghidra"
+    lib = stage / "_lib"
+    lib.mkdir(parents=True)
+
+    shutil.copytree(PKG, lib / "fridaforge", ignore=_IGNORE)
+
+    for item in src.iterdir():
+        if not item.is_file() or item.suffix != ".py":
+            continue
+        if item.name == "backend_ghidra.py":
+            shutil.copy2(item, lib / item.name)
+        else:
+            shutil.copy2(item, stage / item.name)
+
+
+def build_host(host: str, version: str, out_dir: Path = DIST) -> Path:
+    stage = STAGING / host
+    if stage.exists():
+        shutil.rmtree(stage)
+    stage.mkdir(parents=True)
+
+    if host == "ghidra":
+        _stage_ghidra(stage)
+    else:
+        _stage_package_host(stage, host, version)
 
     out_dir.mkdir(parents=True, exist_ok=True)
     out = out_dir / f"fridaforge-{host}-{version}.zip"
@@ -80,7 +103,7 @@ def main() -> None:
     version = args.version or read_version()
     out_dir = Path(args.out_dir).resolve() if args.out_dir else DIST
 
-    for host in ("binja", "ida"):
+    for host in ("binja", "ida", "ghidra"):
         out = build_host(host, version, out_dir)
         print(f"Built {out}")
 

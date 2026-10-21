@@ -43,3 +43,39 @@ def test_build_creates_both_archives(tmp_path):
         assert "fridaforge/templates/hook_function.js" in names
         manifest = json.loads(z.read("fridaforge/ida-plugin.json"))
         assert manifest["plugin"]["version"] == "9.9.9"
+
+
+def test_build_creates_ghidra_archive(tmp_path):
+    subprocess.run(
+        [
+            sys.executable,
+            str(ROOT / "build" / "build.py"),
+            "--version", "9.9.9",
+            "--out-dir", str(tmp_path),
+        ],
+        check=True,
+        cwd=ROOT,
+    )
+
+    ghidra = tmp_path / "fridaforge-ghidra-9.9.9.zip"
+    assert ghidra.exists()
+
+    with zipfile.ZipFile(ghidra) as z:
+        names = z.namelist()
+        # wrappers at the archive root
+        for wrapper in (
+            "generate_function_hook.py",
+            "generate_dlopen_hooks.py",
+            "modify_section_protection.py",
+            "negate_cond_branch_arm64.py",
+            "negate_cond_branch_x86.py",
+        ):
+            assert wrapper in names
+        # shared package + backend under _lib/
+        assert "_lib/backend_ghidra.py" in names
+        assert "_lib/fridaforge/__init__.py" in names
+        assert "_lib/fridaforge/commands/__init__.py" in names
+        assert "_lib/fridaforge/templates/hook_function.js" in names
+        # no manifest in the script bundle
+        assert not any(n.endswith("plugin.json") for n in names)
+        assert not any(n.endswith("ida-plugin.json") for n in names)

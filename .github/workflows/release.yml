@@ -30,3 +30,4 @@ jobs:
           files: |
             dist/fridaforge-binja-${{ steps.version.outputs.value }}.zip
             dist/fridaforge-ida-${{ steps.version.outputs.value }}.zip
+            dist/fridaforge-ghidra-${{ steps.version.outputs.value }}.zip
