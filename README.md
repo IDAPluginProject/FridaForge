@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="assets/logo.jpg" alt="FridaForge logo" width="180" />
+
 # FridaForge
 
 **Generate Frida scripts directly from IDA Pro, Binary Ninja, and Ghidra.** ⚡
