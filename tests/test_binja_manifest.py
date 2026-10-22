@@ -4,7 +4,9 @@ from pathlib import Path
 from fridaforge._version import __version__
 
 ROOT = Path(__file__).resolve().parent.parent
-MANIFEST = ROOT / "plugin.json"
+BINJA_DIR = ROOT / "hosts" / "binja"
+MANIFEST = BINJA_DIR / "plugin.json"
+REQUIREMENTS = BINJA_DIR / "requirements.txt"
 REQUIRED_FIELDS = (
     "pluginmetadataversion",
     "name",
@@ -40,9 +42,14 @@ def test_manifest_version_matches_core():
     assert _manifest()["version"] == __version__
 
 
-def test_manifest_pins_core_exactly():
-    assert _manifest()["dependencies"]["pip"] == [f"fridaforge=={__version__}"]
+def test_requirements_pin_core_exactly():
+    assert REQUIREMENTS.read_text(encoding="utf-8") == f"fridaforge=={__version__}\n"
 
 
-def test_manifest_lives_only_at_repo_root():
-    assert not (ROOT / "hosts" / "binja" / "plugin.json").exists()
+def test_manifest_leaves_dependencies_to_requirements_txt():
+    assert "dependencies" not in _manifest()
+
+
+def test_repo_root_is_not_a_binja_plugin():
+    assert not (ROOT / "plugin.json").exists()
+    assert not (ROOT / "__init__.py").exists()

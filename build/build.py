@@ -50,11 +50,10 @@ def _stage_package_host(stage: Path, host: str, version: str) -> None:
     pkg_dir = stage / "fridaforge"
     shutil.copytree(PKG, pkg_dir, ignore=_IGNORE)
 
+    # requirements.txt pulls the core from PyPI; the zip already bundles it.
     for item in (HOSTS / host).iterdir():
-        if item.is_file():
+        if item.is_file() and item.name != "requirements.txt":
             shutil.copy2(item, pkg_dir / item.name)
-    if host == "binja":
-        shutil.copy2(ROOT / "plugin.json", pkg_dir / "plugin.json")
 
     stamp_version(pkg_dir, host, version)
 

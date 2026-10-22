@@ -1,6 +1,5 @@
 """Binary Ninja plugin entry point for FridaForge."""
 
-import json
 import os
 
 from binaryninja import PluginCommand, log_error, log_info
@@ -9,20 +8,13 @@ PLUGIN_MENU = "FridaForge"
 
 
 def _core_requirement() -> str:
-    # plugin.json sits beside this file in the zip, and at the repo root
-    # (two levels up) in an Extension Manager install.
-    here = os.path.dirname(os.path.abspath(__file__))
-    for manifest in (
-        os.path.join(here, "plugin.json"),
-        os.path.join(here, "..", "..", "plugin.json"),
-    ):
-        try:
-            with open(manifest, encoding="utf-8") as f:
-                pins = json.load(f)["dependencies"]["pip"]
-        except (OSError, KeyError, TypeError, ValueError):
-            continue
-        return next((p for p in pins if p.startswith("fridaforge")), "fridaforge")
-    return "fridaforge"
+    requirements = os.path.join(os.path.dirname(os.path.abspath(__file__)), "requirements.txt")
+    try:
+        with open(requirements, encoding="utf-8") as f:
+            pins = [line.strip() for line in f]
+    except OSError:
+        return "fridaforge"
+    return next((p for p in pins if p.startswith("fridaforge")), "fridaforge")
 
 
 try:

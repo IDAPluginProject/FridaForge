@@ -15,7 +15,11 @@ _spec.loader.exec_module(bump_version)
 
 @pytest.fixture
 def repo_copy(tmp_path):
-    for rel in (bump_version.VERSION_FILE, bump_version.BINJA_MANIFEST):
+    for rel in (
+        bump_version.VERSION_FILE,
+        bump_version.BINJA_MANIFEST,
+        bump_version.BINJA_REQUIREMENTS,
+    ):
         (tmp_path / rel).parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(ROOT / rel, tmp_path / rel)
     return tmp_path
@@ -32,11 +36,12 @@ def test_bump_rewrites_every_copy(repo_copy):
     assert bump_version.read_versions(repo_copy) == {
         "_version.py": "1.2.3",
         "plugin.json version": "1.2.3",
-        "plugin.json pip pin": "1.2.3",
+        "requirements.txt pin": "1.2.3",
     }
     manifest = json.loads((repo_copy / bump_version.BINJA_MANIFEST).read_text(encoding="utf-8"))
-    assert manifest["dependencies"]["pip"] == ["fridaforge==1.2.3"]
     assert manifest["name"] == "FridaForge"
+    requirements = (repo_copy / bump_version.BINJA_REQUIREMENTS).read_text(encoding="utf-8")
+    assert requirements == "fridaforge==1.2.3\n"
 
 
 def test_bump_rejects_non_semver(repo_copy):
@@ -57,8 +62,6 @@ def test_check_reports_each_mismatch(repo_copy):
     assert all("2.0.0" in p for p in problems)
 
 
-def test_stamp_keeps_other_pins():
-    data = {"version": "0.0.1", "dependencies": {"pip": ["fridaforge==0.0.1", "other"]}}
-    stamped = bump_version.stamp_binja_manifest(data, "0.0.2")
-    assert stamped["version"] == "0.0.2"
-    assert stamped["dependencies"]["pip"] == ["fridaforge==0.0.2", "other"]
+def test_pin_requirement_keeps_other_lines():
+    text = "other>=1\nfridaforge==0.0.1\n"
+    assert bump_version.pin_requirement(text, "0.0.2") == "fridaforge==0.0.2\nother>=1\n"

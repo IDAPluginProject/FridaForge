@@ -18,12 +18,7 @@
     "Linux",
     "Windows"
   ],
-  "dependencies": {
-    "pip": [
-      "fridaforge==0.3.1"
-    ]
-  },
-  "version": "0.3.1",
+  "version": "0.3.2",
   "author": "noobexon1",
   "minimumbinaryninjaversion": 9434
 }

@@ -20,7 +20,7 @@ jobs:
       - name: Compile host adapters
         run: >
           python -m py_compile
-          __init__.py hosts/binja/__init__.py hosts/binja/backend_binja.py
+          hosts/binja/__init__.py hosts/binja/backend_binja.py
           hosts/ida/ida_entry.py hosts/ida/backend_ida.py
           hosts/ghidra/backend_ghidra.py
           hosts/ghidra/generate_function_hook.py

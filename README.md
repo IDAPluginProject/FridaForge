@@ -63,7 +63,7 @@ Right-click (or hit a hotkey) in your disassembler to generate ready-to-use Frid
 
 Each feature follows a simple pipeline: a **Frida template** (`fridaforge/templates/`) provides the JavaScript skeleton with placeholders, a **command** (`fridaforge/commands/`) gathers context through a host-agnostic **Backend**, and a **generator** (`fridaforge/core/`) fills the template to produce the final script.
 
-The shared core knows nothing about IDA, Binary Ninja, or Ghidra. Each host lives in `hosts/` and provides a thin **adapter** that implements the `Backend` interface (data extraction, clipboard, menu + hotkey registration). Add a feature once and it works in all three. The root `plugin.json` and `__init__.py` exist only so Binary Ninja's Extension Manager can find the plugin, which lives in `hosts/binja/`.
+The shared core knows nothing about IDA, Binary Ninja, or Ghidra. Each host lives in `hosts/` and provides a thin **adapter** that implements the `Backend` interface (data extraction, clipboard, menu + hotkey registration). Add a feature once and it works in all three.
 
 ## 📦 Installation
 
