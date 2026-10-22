@@ -4,7 +4,7 @@ from pathlib import Path
 from fridaforge._version import __version__
 
 ROOT = Path(__file__).resolve().parent.parent
-MANIFEST = ROOT / "hosts" / "binja" / "plugin.json"
+MANIFEST = ROOT / "plugin.json"
 REQUIRED_FIELDS = (
     "pluginmetadataversion",
     "name",
@@ -42,3 +42,7 @@ def test_manifest_version_matches_core():
 
 def test_manifest_pins_core_exactly():
     assert _manifest()["dependencies"]["pip"] == [f"fridaforge=={__version__}"]
+
+
+def test_manifest_lives_only_at_repo_root():
+    assert not (ROOT / "hosts" / "binja" / "plugin.json").exists()

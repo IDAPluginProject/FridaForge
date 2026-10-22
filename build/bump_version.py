@@ -8,7 +8,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 VERSION_FILE = Path("fridaforge") / "_version.py"
-BINJA_MANIFEST = Path("hosts") / "binja" / "plugin.json"
+BINJA_MANIFEST = Path("plugin.json")
 CORE_REQUIREMENT = "fridaforge"
 
 _SEMVER = re.compile(r"\d+\.\d+\.\d+")

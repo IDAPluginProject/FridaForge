@@ -53,6 +53,8 @@ def _stage_package_host(stage: Path, host: str, version: str) -> None:
     for item in (HOSTS / host).iterdir():
         if item.is_file():
             shutil.copy2(item, pkg_dir / item.name)
+    if host == "binja":
+        shutil.copy2(ROOT / "plugin.json", pkg_dir / "plugin.json")
 
     stamp_version(pkg_dir, host, version)
 

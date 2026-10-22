@@ -9,13 +9,20 @@ PLUGIN_MENU = "FridaForge"
 
 
 def _core_requirement() -> str:
-    manifest = os.path.join(os.path.dirname(os.path.abspath(__file__)), "plugin.json")
-    try:
-        with open(manifest, encoding="utf-8") as f:
-            pins = json.load(f)["dependencies"]["pip"]
-    except (OSError, KeyError, TypeError, ValueError):
-        return "fridaforge"
-    return next((p for p in pins if p.startswith("fridaforge")), "fridaforge")
+    # plugin.json sits beside this file in the zip, and at the repo root
+    # (two levels up) in an Extension Manager install.
+    here = os.path.dirname(os.path.abspath(__file__))
+    for manifest in (
+        os.path.join(here, "plugin.json"),
+        os.path.join(here, "..", "..", "plugin.json"),
+    ):
+        try:
+            with open(manifest, encoding="utf-8") as f:
+                pins = json.load(f)["dependencies"]["pip"]
+        except (OSError, KeyError, TypeError, ValueError):
+            continue
+        return next((p for p in pins if p.startswith("fridaforge")), "fridaforge")
+    return "fridaforge"
 
 
 try:

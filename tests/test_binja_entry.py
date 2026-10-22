@@ -7,8 +7,10 @@ import pytest
 
 from fridaforge.commands import ALL_COMMANDS
 
-BINJA_DIR = Path(__file__).resolve().parent.parent / "hosts" / "binja"
+ROOT = Path(__file__).resolve().parent.parent
+BINJA_DIR = ROOT / "hosts" / "binja"
 ENTRY_NAME = "ff_binja_entry_under_test"
+REPO_PLUGIN_NAME = "ff_repo_plugin_under_test"
 
 
 def _fake_binaryninja() -> types.ModuleType:
@@ -44,20 +46,24 @@ def fake_bn(monkeypatch):
     monkeypatch.setitem(sys.modules, "PySide6", types.ModuleType("PySide6"))
     monkeypatch.setitem(sys.modules, "PySide6.QtWidgets", qt_widgets)
     yield bn
-    for key in [k for k in sys.modules if k.startswith(ENTRY_NAME)]:
+    for key in [k for k in sys.modules if k.startswith((ENTRY_NAME, REPO_PLUGIN_NAME))]:
         del sys.modules[key]
 
 
-def _load_entry():
+def _load_package(name: str, folder: Path):
     spec = importlib.util.spec_from_file_location(
-        ENTRY_NAME,
-        BINJA_DIR / "__init__.py",
-        submodule_search_locations=[str(BINJA_DIR)],
+        name,
+        folder / "__init__.py",
+        submodule_search_locations=[str(folder)],
     )
     module = importlib.util.module_from_spec(spec)
-    sys.modules[ENTRY_NAME] = module
+    sys.modules[name] = module
     spec.loader.exec_module(module)
     return module
+
+
+def _load_entry():
+    return _load_package(ENTRY_NAME, BINJA_DIR)
 
 
 def _hide_core(monkeypatch):
@@ -81,3 +87,11 @@ def test_missing_core_logs_one_error_and_registers_nothing(fake_bn, monkeypatch)
     assert len(fake_bn.errors) == 1
     assert "pip install fridaforge==" in fake_bn.errors[0]
     assert "Extension Manager" in fake_bn.errors[0]
+
+
+def test_repo_root_loads_binja_plugin(fake_bn):
+    _load_package(REPO_PLUGIN_NAME, ROOT)
+    entry = sys.modules[f"{REPO_PLUGIN_NAME}.hosts.binja"]
+    assert entry._CORE_AVAILABLE is True
+    assert len(fake_bn.registered) == len(ALL_COMMANDS)
+    assert fake_bn.errors == []
