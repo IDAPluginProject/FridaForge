@@ -6,6 +6,8 @@ import shutil
 import zipfile
 from pathlib import Path
 
+from bump_version import stamp_binja_manifest
+
 ROOT = Path(__file__).resolve().parent.parent
 PKG = ROOT / "fridaforge"
 HOSTS = ROOT / "hosts"
@@ -24,8 +26,7 @@ def read_version() -> str:
 def stamp_version(pkg_dir: Path, host: str, version: str) -> None:
     if host == "binja":
         path = pkg_dir / "plugin.json"
-        data = json.loads(path.read_text(encoding="utf-8"))
-        data["version"] = version
+        data = stamp_binja_manifest(json.loads(path.read_text(encoding="utf-8")), version)
         path.write_text(json.dumps(data, indent=2), encoding="utf-8")
     else:
         path = pkg_dir / "ida-plugin.json"
