@@ -34,6 +34,8 @@ def test_build_creates_both_archives(tmp_path):
         assert "fridaforge/commands/__init__.py" in names
         manifest = json.loads(z.read("fridaforge/plugin.json"))
         assert manifest["version"] == "9.9.9"
+        entry = z.read("fridaforge/__init__.py").decode("utf-8")
+        assert "from .backend_binja import BinjaBackend" in entry
 
     with zipfile.ZipFile(ida) as z:
         names = z.namelist()
