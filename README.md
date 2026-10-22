@@ -113,7 +113,7 @@ Snippets are designed to be independent building blocks. You can nest scripts in
 ## 🛠️ Building from Source
 
 ```bash
-pip install pytest
+pip install pytest build
 pytest -v                     # run the host-agnostic test suite
 python build/build.py         # writes dist/fridaforge-binja-*.zip, dist/fridaforge-ida-*.zip and dist/fridaforge-ghidra-*.zip
 python -m build               # builds the fridaforge core package (sdist + wheel) published to PyPI
