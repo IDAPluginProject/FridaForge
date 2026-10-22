@@ -70,8 +70,6 @@ def _register_menu(command) -> None:
 
 
 def _register_hotkey(command) -> None:
-    # NOTE: confirm UIActionContext attribute names against the installed
-    # Binary Ninja version during manual verification (Step 5).
     if not command.hotkey or not _UI_AVAILABLE:
         return
     action_name = f"{PLUGIN_MENU}\\{command.description}"
