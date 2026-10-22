@@ -28,3 +28,9 @@ jobs:
           hosts/ghidra/modify_section_protection.py
           hosts/ghidra/negate_cond_branch_arm64.py
           hosts/ghidra/negate_cond_branch_x86.py
+      - name: Build package
+        run: |
+          pip install build
+          python -m build --outdir dist/pkg
+      - name: Check wheel contents
+        run: python build/check_wheel.py dist/pkg/*.whl
