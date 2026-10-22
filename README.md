@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/logo.jpg" alt="FridaForge logo"/>
+<img src="https://raw.githubusercontent.com/noobexon1/FridaForge/main/assets/logo.jpg" alt="FridaForge logo"/>
 
 **Generate Frida scripts directly from IDA Pro, Binary Ninja, and Ghidra.** ⚡
 
@@ -22,11 +22,11 @@
 
 **Generate a function hook** — right-click in the disassembly/pseudocode view and pick an action:
 
-![Generating a function hook from the FridaForge context menu](assets/Screenshot_1.jpg)
+![Generating a function hook from the FridaForge context menu](https://raw.githubusercontent.com/noobexon1/FridaForge/main/assets/Screenshot_1.jpg)
 
 **Get a ready-to-use Frida script** — copied straight to your clipboard:
 
-![The generated Frida hook script](assets/Screenshot_2.jpg)
+![The generated Frida hook script](https://raw.githubusercontent.com/noobexon1/FridaForge/main/assets/Screenshot_2.jpg)
 
 ## ✨ Features
 
@@ -67,9 +67,13 @@ The shared core knows nothing about IDA, Binary Ninja, or Ghidra. Each host live
 
 ## 📦 Installation
 
-Grab the archive for your tool from the [latest release](https://github.com/noobexon1/FridaForge/releases). There's one per host — `fridaforge-binja-<version>.zip`, `fridaforge-ida-<version>.zip`, and `fridaforge-ghidra-<version>.zip`.
+Binary Ninja users can install straight from the Extension Manager. For everything else, grab the archive for your tool from the [latest release](https://github.com/noobexon1/FridaForge/releases). There's one per host — `fridaforge-binja-<version>.zip`, `fridaforge-ida-<version>.zip`, and `fridaforge-ghidra-<version>.zip`.
 
 ### 🟠 Binary Ninja
+
+**Extension Manager (recommended):** open the Extension Manager (**Plugins → Manage Plugins**), search for **FridaForge**, and click **Install**. The shared core (`fridaforge` on PyPI) is installed automatically. Restart Binary Ninja if prompted.
+
+**Manual install:**
 
 1. Find your user plugins directory by running this in Binary Ninja's Python console:
    ```python
@@ -77,6 +81,8 @@ Grab the archive for your tool from the [latest release](https://github.com/noob
    ```
 2. Extract `fridaforge-binja-<version>.zip` into that directory so that `<binja user plugins>/fridaforge/` exists.
 3. Restart Binary Ninja.
+
+> Switching from a manual install to the Extension Manager? Delete `<binja user plugins>/fridaforge/` first. Otherwise both copies load and every command appears twice.
 
 ### 🔵 IDA Pro
 
@@ -108,11 +114,14 @@ Snippets are designed to be independent building blocks. You can nest scripts in
 
 ```bash
 pip install pytest
-pytest -v                 # run the host-agnostic test suite
-python build/build.py     # writes dist/fridaforge-binja-*.zip, dist/fridaforge-ida-*.zip and dist/fridaforge-ghidra-*.zip
+pytest -v                     # run the host-agnostic test suite
+python build/build.py         # writes dist/fridaforge-binja-*.zip, dist/fridaforge-ida-*.zip and dist/fridaforge-ghidra-*.zip
+python -m build               # builds the fridaforge core package (sdist + wheel) published to PyPI
 ```
 
 Builds are deterministic — the same source produces byte-identical archives.
+
+To release, run `python build/bump_version.py X.Y.Z`, commit, and push tag `vX.Y.Z`. CI publishes the core to PyPI, then attaches the three archives to a GitHub release.
 
 ## 🤝 Contributing
 
